@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chathan Companion Control Center</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+  <!-- First Launch Welcome Modal -->
+  <div id="welcome-modal" class="modal-overlay hidden">
+    <div class="modal-box welcome-box">
+      <div class="welcome-header">
+        <svg viewBox="0 0 100 100" width="80" height="80">
+          <circle cx="50" cy="50" r="40" fill="#4eb869"/>
+          <circle cx="38" cy="45" r="6" fill="#fff"/>
+          <circle cx="62" cy="45" r="6" fill="#fff"/>
+          <circle cx="38" cy="45" r="3" fill="#111"/>
+          <circle cx="62" cy="45" r="3" fill="#111"/>
+          <polygon points="36,25 30,12 42,22" fill="#fff8dc"/>
+          <polygon points="64,25 70,12 58,22" fill="#fff8dc"/>
+          <path d="M 40 60 Q 50 68 60 60" stroke="#111" stroke-width="3" fill="none"/>
+        </svg>
+        <h2>CHATHAN</h2>
+        <p class="subtitle">Your tiny goblin roommate has arrived.</p>
+      </div>
+
+      <div class="welcome-body">
+        <p>I promise not to annoy you too much!</p>
+        <p class="welcome-section-title">Choose your quick reminder preferences:</p>
+
+        <div class="welcome-options">
+          <label class="welcome-checkbox">
+            <input type="checkbox" id="w-water" checked>
+            <span>💧 Water reminders (every 45m)</span>
+          </label>
+          <label class="welcome-checkbox">
+            <input type="checkbox" id="w-break" checked>
+            <span>👀 Screen breaks (every 50m)</span>
+          </label>
+          <label class="welcome-checkbox">
+            <input type="checkbox" id="w-temp" checked>
+            <span>🌡️ Hardware temperature alerts</span>
+          </label>
+          <label class="welcome-checkbox">
+            <input type="checkbox" id="w-battery" checked>
+            <span>🔋 Laptop battery alerts</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="welcome-footer">
+        <button id="btn-finish-welcome" class="btn-primary">Let's Go! 🧌</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Reminder Modal -->
+  <div id="reminder-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>Add Custom Reminder</h3>
+      <div class="form-group">
+        <label>Reminder Title</label>
+        <input type="text" id="rem-title" placeholder="e.g. Study Compiler Design">
+      </div>
+      <div class="form-group">
+        <label>Message for Chathan</label>
+        <input type="text" id="rem-message" placeholder="e.g. Time to review your notes!">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Repeat Type</label>
+          <select id="rem-repeat">
+            <option value="daily">Daily at specific time</option>
+            <option value="interval">Every X minutes</option>
+            <option value="once">Once</option>
+          </select>
+        </div>
+        <div class="form-group" id="group-rem-time">
+          <label>Time (HH:MM)</label>
+          <input type="time" id="rem-time" value="19:00">
+        </div>
+        <div class="form-group hidden" id="group-rem-interval">
+          <label>Interval (Minutes)</label>
+          <input type="number" id="rem-interval" value="60" min="5" max="1440">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-cancel-reminder" class="btn-secondary">Cancel</button>
+        <button id="btn-save-reminder" class="btn-primary">Save Reminder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Layout -->
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">🧌</span>
+        <span class="brand-name">Chathan</span>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-tab="pet">
+          <span class="nav-icon">🧌</span> Pet Controls
+        </button>
+        <button class="nav-btn" data-tab="reminders">
+          <span class="nav-icon">⏰</span> Reminders
+        </button>
+        <button class="nav-btn" data-tab="system">
+          <span class="nav-icon">💻</span> Hardware Monitor
+        </button>
+        <button class="nav-btn" data-tab="personality">
+          <span class="nav-icon">🎭</span> Personality & Sounds
+        </button>
+        <button class="nav-btn" data-tab="gaming">
+          <span class="nav-icon">🎮</span> Gaming & Quiet Mode
+        </button>
+        <button class="nav-btn" data-tab="stats">
+          <span class="nav-icon">📊</span> Screen-Time Report
+        </button>
+        <button class="nav-btn" data-tab="privacy">
+          <span class="nav-icon">🔒</span> Privacy & Offline
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="offline-badge">
+          <span class="dot green"></span> Offline Mode Active
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- PET TAB -->
+      <section id="tab-pet" class="tab-content active">
+        <div class="section-header">
+          <h2>Pet Settings</h2>
+          <p>Customize how Chathan looks and behaves on your screen.</p>
+        </div>
+
+        <div class="card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Pet Enabled</div>
+              <div class="setting-desc">Show Chathan desktop companion on screen</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-petEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Movement System</div>
+              <div class="setting-desc">Allow Chathan to occasionally walk around screen edges</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-movementEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Always On Top</div>
+              <div class="setting-desc">Keep Chathan floating above other application windows</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-alwaysOnTop">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="form-group">
+            <div class="label-with-value">
+              <label>Pet Size Scale</label>
+              <span id="val-petScale" class="badge">1.0x</span>
+            </div>
+            <input type="range" id="set-petScale" min="0.5" max="2.0" step="0.1" value="1.0">
+          </div>
+
+          <div class="form-group">
+            <div class="label-with-value">
+              <label>Walking Speed</label>
+              <span id="val-petSpeed" class="badge">1.0x</span>
+            </div>
+            <input type="range" id="set-petSpeed" min="0.5" max="2.0" step="0.1" value="1.0">
+          </div>
+
+          <div class="form-group">
+            <label>Pet Target Monitor</label>
+            <select id="set-petMonitor">
+              <option value="primary">Primary Display (Recommended)</option>
+              <option value="all">All Monitors</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- REMINDERS TAB -->
+      <section id="tab-reminders" class="tab-content">
+        <div class="section-header">
+          <h2>Reminders & Health Checks</h2>
+          <p>Local offline reminders to keep you hydrated and relaxed.</p>
+        </div>
+
+        <div class="card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">💧 Water Reminders</div>
+              <div class="setting-desc">Chathan reminds you to stay hydrated</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-waterEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="form-group inline-group">
+            <label>Interval (Minutes):</label>
+            <input type="number" id="set-waterInterval" min="10" max="240" value="45">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">👀 Screen Break Reminders</div>
+              <div class="setting-desc">Reminds you to look away and rest your eyes</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-screenBreakEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="form-group inline-group">
+            <label>Interval (Minutes):</label>
+            <input type="number" id="set-screenBreakInterval" min="10" max="240" value="50">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">🧘 Stretch Reminders</div>
+              <div class="setting-desc">Encourages standing up and stretching</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-stretchEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="form-group inline-group">
+            <label>Interval (Minutes):</label>
+            <input type="number" id="set-stretchInterval" min="15" max="300" value="90">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header-with-btn">
+            <h3>Custom Reminders</h3>
+            <button id="btn-add-custom-reminder" class="btn-primary btn-sm">+ Add Reminder</button>
+          </div>
+          <div id="custom-reminders-list" class="reminders-list">
+            <!-- Custom Reminders dynamically rendered here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SYSTEM TAB -->
+      <section id="tab-system" class="tab-content">
+        <div class="section-header">
+          <h2>Hardware & System Monitoring</h2>
+          <p>Real-time local monitoring for CPU, RAM, Temperature, and Battery.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">💻</div>
+            <div class="metric-title">CPU Load</div>
+            <div id="metric-cpu" class="metric-value">--%</div>
+            <div class="progress-bar"><div id="bar-cpu" class="progress-fill" style="width: 0%"></div></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">🧠</div>
+            <div class="metric-title">RAM Usage</div>
+            <div id="metric-ram" class="metric-value">-- GB</div>
+            <div id="metric-ram-sub" class="metric-sub">--% used</div>
+            <div class="progress-bar"><div id="bar-ram" class="progress-fill" style="width: 0%"></div></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">🌡️</div>
+            <div class="metric-title">CPU Temperature</div>
+            <div id="metric-temp" class="metric-value">Unavailable</div>
+            <div id="metric-temp-sub" class="metric-sub">Graceful sensor fallback</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">🔋</div>
+            <div class="metric-title">Battery</div>
+            <div id="metric-battery" class="metric-value">--%</div>
+            <div id="metric-battery-sub" class="metric-sub">Status: --</div>
+          </div>
+        </div>
+
+        <div class="card mt-20">
+          <h3>Alert Thresholds</h3>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Temperature Alerts</div>
+              <div class="setting-desc">Chathan warns you when your computer gets hot</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-temperatureAlerts">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group inline-group">
+            <label>CPU Warning Temp (°C):</label>
+            <input type="number" id="set-cpuWarningTemp" min="60" max="95" value="80">
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Battery Alerts</div>
+              <div class="setting-desc">Alerts when battery drops below 20% or 10%</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-batteryAlerts">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- PERSONALITY TAB -->
+      <section id="tab-personality" class="tab-content">
+        <div class="section-header">
+          <h2>Personality & Audio</h2>
+          <p>Configure Chathan's speech frequency, audio effects, and mood.</p>
+        </div>
+
+        <div class="card">
+          <div class="mood-container">
+            <div class="mood-title">Current Mood:</div>
+            <div id="mood-badge" class="mood-badge happy">🧌 Happy</div>
+          </div>
+
+          <div class="setting-row mt-15">
+            <div>
+              <div class="setting-title">Dialogue System</div>
+              <div class="setting-desc">Chathan occasionally talks using speech bubbles</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-dialogueEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Dialogue Frequency</label>
+            <select id="set-dialogueFrequency">
+              <option value="low">Low (~10 minute interval)</option>
+              <option value="normal" selected>Normal (~5 minute interval)</option>
+              <option value="high">High (~2.5 minute interval)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Sound Effects</div>
+              <div class="setting-desc">Subtle synthesized cute footsteps, yawns, and pops</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-soundEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <div class="label-with-value">
+              <label>Sound Volume</label>
+              <span id="val-soundVolume" class="badge">50%</span>
+            </div>
+            <input type="range" id="set-soundVolume" min="0.0" max="1.0" step="0.05" value="0.5">
+          </div>
+        </div>
+      </section>
+
+      <!-- GAMING TAB -->
+      <section id="tab-gaming" class="tab-content">
+        <div class="section-header">
+          <h2>Gaming & Quiet Mode</h2>
+          <p>Prevent Chathan from interrupting full-screen games or video playback.</p>
+        </div>
+
+        <div class="card">
+          <div class="form-group">
+            <label>Gaming Mode</label>
+            <select id="set-gamingMode">
+              <option value="auto">AUTO (Detect full-screen games automatically)</option>
+              <option value="on">ON (Force Quiet Mode constantly)</option>
+              <option value="off">OFF (Never enter Quiet Mode)</option>
+            </select>
+          </div>
+
+          <div class="setting-row mt-15">
+            <div>
+              <div class="setting-title">Hide During Games</div>
+              <div class="setting-desc">Automatically hide Chathan's sprite when gaming</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-hideDuringGames">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS TAB -->
+      <section id="tab-stats" class="tab-content">
+        <div class="section-header">
+          <h2>Today's Chathan Report</h2>
+          <p>Local active computer usage and companion statistics.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-screentime">0h 0m</div>
+            <div class="stat-label">Daily Screen Time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-breaks">0</div>
+            <div class="stat-label">Breaks Taken</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-water">0</div>
+            <div class="stat-label">Water Reminders</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-interactions">0</div>
+            <div class="stat-label">Chathan Interactions</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRIVACY TAB -->
+      <section id="tab-privacy" class="tab-content">
+        <div class="section-header">
+          <h2>Privacy & Offline Guarantee</h2>
+          <p>Chathan is engineered to respect your total digital privacy.</p>
+        </div>
+
+        <div class="card privacy-card">
+          <div class="privacy-header">
+            <span class="privacy-lock-icon">🔒</span>
+            <div>
+              <h3>100% Offline Application</h3>
+              <p>Zero network connectivity required or permitted.</p>
+            </div>
+          </div>
+
+          <ul class="privacy-list">
+            <li>✅ No cloud AI models or remote API calls.</li>
+            <li>✅ No user tracking, telemetry, or analytics.</li>
+            <li>✅ No accounts, passwords, or logins.</li>
+            <li>✅ No advertisements or third-party connections.</li>
+            <li>✅ All data remains safely on your local computer.</li>
+          </ul>
+
+          <div class="storage-info">
+            <strong>Data Storage Path:</strong>
+            <code id="storage-path-display">%APPDATA%\chathan\chathan_store.json</code>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

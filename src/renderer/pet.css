@@ -1,0 +1,246 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#desktop-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Goblin Wrapper */
+#goblin-wrapper {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: bottom center;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+#goblin-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Facing Left flip */
+#goblin-wrapper.face-left {
+  transform: scaleX(-1);
+}
+
+/* Facing Left + Speech Bubble fix */
+#goblin-wrapper.face-left .speech-bubble {
+  transform: scaleX(-1);
+}
+
+/* Animations State Machine */
+
+/* Idle breathing */
+#goblin-wrapper.state-idle #goblin-body-group {
+  animation: idleBreathing 3s ease-in-out infinite;
+}
+
+@keyframes idleBreathing {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-2px) scale(1.02, 0.98); }
+}
+
+/* Ear twitching */
+#goblin-wrapper.state-idle .left-ear {
+  animation: twitchLeftEar 5s infinite;
+}
+#goblin-wrapper.state-idle .right-ear {
+  animation: twitchRightEar 6s infinite;
+}
+
+@keyframes twitchLeftEar {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92% { transform: rotate(-8deg); }
+  95% { transform: rotate(4deg); }
+}
+@keyframes twitchRightEar {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(8deg); }
+  94% { transform: rotate(-4deg); }
+}
+
+/* Walking state */
+#goblin-wrapper.state-walk {
+  animation: walkBounce 0.4s ease-in-out infinite alternate;
+}
+#goblin-wrapper.state-walk .left-foot {
+  animation: footStepLeft 0.4s ease-in-out infinite alternate;
+}
+#goblin-wrapper.state-walk .right-foot {
+  animation: footStepRight 0.4s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes walkBounce {
+  0% { transform: translateY(0px) rotate(-2deg); }
+  100% { transform: translateY(-5px) rotate(2deg); }
+}
+@keyframes footStepLeft {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+@keyframes footStepRight {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* Sitting state */
+#goblin-wrapper.state-sit #goblin-body-group {
+  transform: translateY(6px) scale(1.05, 0.88);
+}
+
+/* Sleeping state */
+#goblin-wrapper.state-sleep #goblin-body-group {
+  transform: translateY(8px) rotate(-10deg) scale(1.05, 0.85);
+}
+#goblin-wrapper.state-sleep #eyelid-left,
+#goblin-wrapper.state-sleep #eyelid-right {
+  d: path("M 30 34 Q 38 48 46 34 Z");
+}
+
+/* Happy / Bouncing */
+#goblin-wrapper.state-happy {
+  animation: happyJump 0.5s ease-in-out 3;
+}
+@keyframes happyJump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px) scale(0.9, 1.1); }
+}
+
+/* Confused */
+#goblin-wrapper.state-confused .head-base {
+  animation: headTilt 1s ease-in-out infinite alternate;
+}
+@keyframes headTilt {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Warning / Panicked */
+#goblin-wrapper.state-warning {
+  animation: panicShake 0.15s ease-in-out infinite;
+}
+@keyframes panicShake {
+  0% { transform: translateX(-2px); }
+  100% { transform: translateX(2px); }
+}
+
+/* Speech Bubble */
+.speech-bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
+  background: rgba(26, 22, 37, 0.95);
+  color: #f0ebd8;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #8A2BE2;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 10px rgba(138, 43, 226, 0.4);
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 100;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: #8A2BE2 transparent transparent transparent;
+}
+
+.speech-bubble.hidden {
+  opacity: 0;
+  transform: translate(-50%, -90%) scale(0.9);
+  pointer-events: none;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  background: rgba(22, 18, 33, 0.96);
+  border: 1px solid rgba(138, 43, 226, 0.5);
+  border-radius: 10px;
+  padding: 6px 0;
+  min-width: 140px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(138, 43, 226, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  pointer-events: auto;
+  font-size: 13px;
+  color: #e0e0e0;
+}
+
+.context-menu.hidden {
+  display: none;
+}
+
+.menu-header {
+  padding: 6px 14px;
+  font-weight: 700;
+  color: #4eb869;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.menu-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
+}
+
+.menu-item {
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-item:hover {
+  background: rgba(138, 43, 226, 0.3);
+  color: #ffffff;
+}
+
+.menu-item.danger:hover {
+  background: rgba(220, 53, 69, 0.3);
+  color: #ff6b6b;
+}
+
+/* Floating Particles (Stars / Zzz / Hearts) */
+.particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 14px;
+  animation: floatUp 1.5s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(0.8); }
+  100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+}

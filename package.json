@@ -1,0 +1,27 @@
+{
+  "name": "chathan",
+  "version": "1.0.0",
+  "description": "Offline Desktop Goblin Companion",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder --win"
+  },
+  "keywords": [
+    "desktop-pet",
+    "goblin",
+    "electron",
+    "offline",
+    "companion"
+  ],
+  "author": "Chathan Team",
+  "license": "MIT",
+  "dependencies": {
+    "systeminformation": "^5.25.11"
+  },
+  "devDependencies": {
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chathan Desktop Companion</title>
+  <link rel="stylesheet" href="pet.css">
+</head>
+<body>
+
+  <div id="desktop-stage">
+    <!-- Floating Speech Bubble -->
+    <div id="speech-bubble" class="speech-bubble hidden">
+      <span id="speech-text">Hello human!</span>
+    </div>
+
+    <!-- Particle Animation Overlay -->
+    <div id="particle-container"></div>
+
+    <!-- Main Goblin Sprite Wrapper -->
+    <div id="goblin-wrapper" class="state-idle">
+      <!-- High Quality SVG Goblin -->
+      <svg id="goblin-svg" viewBox="0 0 100 100" width="100" height="100">
+        <g id="goblin-body-group">
+          <!-- Shadow -->
+          <ellipse cx="50" cy="92" rx="22" ry="5" fill="rgba(0,0,0,0.25)" class="shadow"/>
+          
+          <!-- Feet -->
+          <ellipse cx="38" cy="88" rx="7" ry="4" fill="#29733c" class="foot left-foot"/>
+          <ellipse cx="62" cy="88" rx="7" ry="4" fill="#29733c" class="foot right-foot"/>
+
+          <!-- Body / Clothes -->
+          <path d="M 32 60 L 68 60 L 65 85 L 35 85 Z" fill="#3a2e4a"/>
+          <rect x="42" y="78" width="16" height="4" fill="#8A2BE2"/>
+          <rect x="48" y="77" width="4" height="6" fill="#ffd700"/>
+
+          <!-- Hands / Arms -->
+          <circle cx="28" cy="68" r="5" fill="#4eb869" class="hand left-hand"/>
+          <circle cx="72" cy="68" r="5" fill="#4eb869" class="hand right-hand"/>
+
+          <!-- Head Base -->
+          <ellipse cx="50" cy="45" rx="26" ry="22" fill="#4eb869" class="head-base"/>
+
+          <!-- Pointy Goblin Ears -->
+          <path d="M 26 42 Q 10 32 8 46 Q 24 50 26 46 Z" fill="#36944e" class="ear left-ear"/>
+          <path d="M 74 42 Q 90 32 92 46 Q 76 50 74 46 Z" fill="#36944e" class="ear right-ear"/>
+          <path d="M 24 44 Q 13 36 12 45 Q 23 48 24 46 Z" fill="#e88989" opacity="0.6"/>
+          <path d="M 76 44 Q 87 36 88 45 Q 77 48 76 46 Z" fill="#e88989" opacity="0.6"/>
+
+          <!-- Horns -->
+          <polygon points="38,26 32,14 42,23" fill="#fff8dc" stroke="#d4c896" stroke-width="0.5"/>
+          <polygon points="62,26 68,14 58,23" fill="#fff8dc" stroke="#d4c896" stroke-width="0.5"/>
+
+          <!-- Messy Hair -->
+          <path d="M 32 28 Q 40 18 50 24 Q 60 18 68 28 Q 50 22 32 28 Z" fill="#2c1a32"/>
+          <path d="M 45 22 Q 50 14 55 22 Z" fill="#2c1a32"/>
+
+          <!-- Eyes -->
+          <g id="eyes-group">
+            <ellipse cx="38" cy="43" rx="8" ry="9" fill="#ffffff" class="eye-bg"/>
+            <ellipse cx="62" cy="43" rx="8" ry="9" fill="#ffffff" class="eye-bg"/>
+            
+            <circle id="iris-left" cx="38" cy="43" r="4.5" fill="#f39c12"/>
+            <circle id="iris-right" cx="62" cy="43" r="4.5" fill="#f39c12"/>
+            
+            <circle id="pupil-left" cx="38" cy="43" r="2" fill="#111111"/>
+            <circle id="pupil-right" cx="62" cy="43" r="2" fill="#111111"/>
+
+            <!-- Eye Shine -->
+            <circle cx="36" cy="41" r="1.5" fill="#ffffff"/>
+            <circle cx="60" cy="41" r="1.5" fill="#ffffff"/>
+
+            <!-- Eyelids for blinking/sleeping -->
+            <path id="eyelid-left" d="M 30 34 Q 38 34 46 34 Q 38 34 30 34 Z" fill="#36944e"/>
+            <path id="eyelid-right" d="M 54 34 Q 62 34 70 34 Q 62 34 54 34 Z" fill="#36944e"/>
+          </g>
+
+          <!-- Nose -->
+          <ellipse cx="50" cy="50" rx="3" ry="2" fill="#36944e"/>
+
+          <!-- Mouth with Mischievous Smile -->
+          <path id="mouth" d="M 40 55 Q 50 63 60 55" stroke="#111111" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Snaggle tooth -->
+          <polygon id="tooth" points="43,55 45,58 47,55" fill="#ffffff"/>
+
+          <!-- Cheeks -->
+          <circle cx="32" cy="52" r="3" fill="#e88989" opacity="0.4"/>
+          <circle cx="68" cy="52" r="3" fill="#e88989" opacity="0.4"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Custom Right Click Context Menu -->
+    <div id="context-menu" class="context-menu hidden">
+      <div class="menu-header">🧌 Chathan</div>
+      <div class="menu-divider"></div>
+      <div class="menu-item" data-action="talk">💬 Talk</div>
+      <div class="menu-item" data-action="feed">🍎 Feed</div>
+      <div class="menu-item" data-action="pet">🫳 Pet</div>
+      <div class="menu-item" data-action="play">🎮 Play</div>
+      <div class="menu-item" data-action="sleep">💤 Sleep</div>
+      <div class="menu-divider"></div>
+      <div class="menu-item" data-action="pause">⏸️ Pause Pet</div>
+      <div class="menu-item" data-action="hide">👁️ Hide Pet</div>
+      <div class="menu-item" data-action="settings">⚙️ Settings</div>
+      <div class="menu-divider"></div>
+      <div class="menu-item danger" data-action="exit">❌ Exit Chathan</div>
+    </div>
+  </div>
+
+  <script src="sounds.js"></script>
+  <script src="dialogue.js"></script>
+  <script src="pet.js"></script>
+</body>
+</html>
